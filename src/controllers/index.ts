@@ -13,11 +13,10 @@ export const getProxies = async (req: Request, res: Response): Promise<void> => 
 
 export const addProxy = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const body = req.body as Pick<IProxy, "address" | "port">
+		const body = req.body as Pick<IProxy, "scheme" | "address" | "port">
+		const proxy = new Proxy({scheme: body.scheme, address: body.address, port: body.port})
 
-		const proxy = new Proxy({address: body.address, port: body.port})
-
-		proxy.save()
+		proxy.insert()
 			.then((newProxy) => {
 				res
 					.status(201)

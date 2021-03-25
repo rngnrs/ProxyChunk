@@ -1,8 +1,12 @@
 export interface IProxy {
-	address?: string
-	port?: number
-	addedAt?: Date
-	checkedAt?: Date
+	scheme: string
+	address: string
+	port: number
+	good?: boolean
+	speed?: number
+	createdAt?: Date
+	updatedAt?: Date
 
-	save: () => Promise<IProxy>
+	insert: () => Promise<IProxy>
+	update: () => Promise<IProxy>
 }
