@@ -1,9 +1,8 @@
 export interface IProxy {
-	address: string
-	port: number
-	addedAt: number
-	checkedAt?: number
+	address?: string
+	port?: number
+	addedAt?: Date
+	checkedAt?: Date
 
-	save: () => Promise<this>
-	find: () => Promise<this[]>
+	save: () => Promise<IProxy>
 }
