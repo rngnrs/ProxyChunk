@@ -8,12 +8,22 @@ const shiva = spawn("ProxyShiva", ["-json", "-interactive"])
 shiva.stdin.setDefaultEncoding("utf-8")
 
 shiva.stdout.on("data", (data) => {
-	let proxy = new Proxy(JSON.parse(data.toString()))
-	proxy.update()
+	data.toString().split("\n").forEach((result: string) => {
+		try {
+			let proxy = new Proxy(JSON.parse(result))
+			proxy.upsert()
+		} catch(e) {
+			//
+		}
+	})
 })
 
 export default {
-	check(proxy: IProxy) {
-		shiva.stdin.write(`${proxy.scheme}://${proxy.address}:${proxy.port}\n`)
+	checkOne(scheme: string, address: string, port: number) {
+		shiva.stdin.write(`${scheme}://${address}:${port}\n`)
+	},
+
+	checkMany(schemes: string[], addresses: string[], ports: number[]) {
+		shiva.stdin.write(`${schemes.join(",")}://${addresses.join("-")}:${ports.join("-")}\n`)
 	}
 }

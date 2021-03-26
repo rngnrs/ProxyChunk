@@ -1,6 +1,8 @@
 import { Response, Request } from "express"
+
 import { IProxy } from "../types/proxy"
 import { Proxy } from "../models/proxy"
+import shivaRunner from "../shivaRunner"
 
 export const getProxies = async (req: Request, res: Response): Promise<void> => {
 	try {
@@ -11,22 +13,11 @@ export const getProxies = async (req: Request, res: Response): Promise<void> => 
 	}
 }
 
-export const addProxy = async (req: Request, res: Response): Promise<void> => {
+export const addProxies = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const body = req.body as Pick<IProxy, "scheme" | "address" | "port">
-		const proxy = new Proxy({scheme: body.scheme, address: body.address, port: body.port})
+		shivaRunner.checkMany(req.body.schemes, req.body.addresses, req.body.ports)
 
-		proxy.insert()
-			.then((newProxy) => {
-				res
-					.status(201)
-					.json(newProxy)
-			})
-			.catch((error) => {
-				res
-					.status(500)
-					.json({error: error.detail})
-			})
+		res.status(200).json(req.body)
 	} catch (error) {
 		throw error
 	}

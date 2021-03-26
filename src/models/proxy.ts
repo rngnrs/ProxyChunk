@@ -11,19 +11,23 @@
 
 import { IProxy } from "./../types/proxy"
 import pool from "./index"
-import shivaRunner from "../shivaRunner"
 
 const queries = {
+	_ts: () => {
+		return `to_timestamp(${Date.now()} / 1000.0)`
+	},
+
 	selectProxies: () => {
 		return "select scheme, address, port, good, speed, created_at as \"createdAt\", updated_at as \"updatedAt\" from proxies"
 	},
 
-	insertProxy: (scheme: string, address: string, port: number) => {
-		return `insert into proxies (scheme, address, port, created_at) values ('${scheme}', '${address}', ${port}, to_timestamp(${Date.now()} / 1000.0))`
+	insertProxy: (scheme: string, address: string, port: number, good = false, speed = -1) => {
+
+		return `insert into proxies (scheme, address, port, good, speed, created_at, updated_at) values ('${scheme}', '${address}', ${port}, ${good}, ${speed}, ${queries._ts()}, ${queries._ts()})`
 	},
 
 	updateProxy: (scheme: string, address: string, port: number, good = false, speed = -1) => {
-		return `update proxies set good = ${good}, speed = ${speed}, updated_at = to_timestamp(${Date.now()} / 1000.0) where scheme = '${scheme}' and address = '${address}' and port = ${port}`
+		return `update proxies set good = ${good}, speed = ${speed}, updated_at = ${queries._ts()} where scheme = '${scheme}' and address = '${address}' and port = ${port}`
 	}
 }
 
@@ -66,27 +70,40 @@ export class Proxy implements IProxy {
 		})
 	}
 
-	insert() {
-		return new Promise<IProxy>((resolve, reject) => {
-			pool.query(queries.insertProxy(this.scheme, this.address, this.port), (error, results) => {
-				if (error === undefined) {
-					shivaRunner.check(this)
-					resolve((this as unknown) as IProxy)
-				} else {
-					reject(error)
-				}
-			})
-		})
-	}
+	// insert() {
+	// 	return new Promise<IProxy>((resolve, reject) => {
+	// 		pool.query(queries.insertProxy(this.scheme, this.address, this.port), (error, results) => {
+	// 			if (error === undefined) {
+	// 				shivaRunner.checkOne(this.scheme, this.address, this.port)
+	// 				resolve((this as unknown) as IProxy)
+	// 			} else {
+	// 				reject(error)
+	// 			}
+	// 		})
+	// 	})
+	// }
 
-	update() {
+	// update() {
+	// 	return new Promise<IProxy>((resolve, reject) => {
+	// 		pool.query(queries.updateProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number), (error, results) => {
+	// 			if (error === undefined) {
+	// 				resolve((this as unknown) as IProxy)
+	// 			} else {
+	// 				reject(error)
+	// 			}
+	// 		})
+	// 	})
+	// }
+
+	upsert() {
 		return new Promise<IProxy>((resolve, reject) => {
-			pool.query(queries.updateProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number), (error, results) => {
-				if (error === undefined) {
-					resolve((this as unknown) as IProxy)
-				} else {
-					reject(error)
-				}
+			let query = // One of these always succeeds by design
+				queries.updateProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number) 
+				+ "; "
+				+ queries.insertProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number)
+
+			pool.query(query, (error, results) => {
+				resolve((this as unknown) as IProxy)
 			})
 		})
 	}

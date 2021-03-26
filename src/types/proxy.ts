@@ -7,6 +7,7 @@ export interface IProxy {
 	createdAt?: Date
 	updatedAt?: Date
 
-	insert: () => Promise<IProxy>
-	update: () => Promise<IProxy>
+	// insert: () => Promise<IProxy>
+	// update: () => Promise<IProxy>
+	upsert: () => Promise<IProxy>
 }
