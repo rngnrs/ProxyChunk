@@ -18,7 +18,18 @@ shiva.stdout.on("data", (data) => {
 	})
 })
 
-export default {
+function recheckRoutine() {
+	Proxy.findLRC().then((leastRecentlyChecked) => {
+		checker.checkOne(leastRecentlyChecked.scheme, leastRecentlyChecked.address, leastRecentlyChecked.port)
+	})
+	.catch((e) => {
+		//
+	})
+}
+
+let recheckInterval = setInterval(recheckRoutine, 1e4)
+
+const checker = {
 	checkOne(scheme: string, address: string, port: number) {
 		shiva.stdin.write(`${scheme}://${address}:${port}\n`)
 	},
@@ -27,3 +38,5 @@ export default {
 		shiva.stdin.write(`${schemes.join(",")}://${addresses.join("-")}:${ports.join("-")}\n`)
 	}
 }
+
+export default checker

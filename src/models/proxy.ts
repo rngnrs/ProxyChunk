@@ -17,12 +17,19 @@ const queries = {
 		return `to_timestamp(${Date.now()} / 1000.0)`
 	},
 
+	selectProxy: (scheme: string, address: string, port: number) => {
+		return `select scheme, address, port, good, speed, created_at as \"createdAt\", updated_at as \"updatedAt\" from proxies where scheme = '${scheme}' and address = '${address}' and port = ${port}`
+	},
+
 	selectProxies: () => {
 		return "select scheme, address, port, good, speed, created_at as \"createdAt\", updated_at as \"updatedAt\" from proxies"
 	},
 
-	insertProxy: (scheme: string, address: string, port: number, good = false, speed = -1) => {
+	selectLRC: () => {
+		return "select scheme, address, port, good, speed, created_at as \"createdAt\", updated_at as \"updatedAt\" from proxies where updated_at = (select MIN(updated_at) from proxies) limit 1"
+	},
 
+	insertProxy: (scheme: string, address: string, port: number, good = false, speed = -1) => {
 		return `insert into proxies (scheme, address, port, good, speed, created_at, updated_at) values ('${scheme}', '${address}', ${port}, ${good}, ${speed}, ${queries._ts()}, ${queries._ts()})`
 	},
 
@@ -70,6 +77,14 @@ export class Proxy implements IProxy {
 		})
 	}
 
+	static findLRC() {
+		return new Promise<IProxy>((resolve, reject) => {
+			pool.query(queries.selectLRC(), (error, results) => {
+				error || results.rows.length < 1 ? reject(error) : resolve(new Proxy(results.rows[0]))
+			})
+		})
+	}
+
 	// insert() {
 	// 	return new Promise<IProxy>((resolve, reject) => {
 	// 		pool.query(queries.insertProxy(this.scheme, this.address, this.port), (error, results) => {
@@ -97,13 +112,16 @@ export class Proxy implements IProxy {
 
 	upsert() {
 		return new Promise<IProxy>((resolve, reject) => {
-			let query = // One of these always succeeds by design
-				queries.updateProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number) 
-				+ "; "
-				+ queries.insertProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number)
-
-			pool.query(query, (error, results) => {
-				resolve((this as unknown) as IProxy)
+			pool.query(queries.selectProxy(this.scheme, this.address, this.port), (error, results) => {
+				if (error === undefined && results.rows.length === 1) {
+					pool.query(queries.updateProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number), (error, results) => {
+						error ? reject(error) : resolve((this as unknown) as IProxy)
+					})
+				} else {
+					pool.query(queries.insertProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number), (error, results) => {
+						error ? reject(error) : resolve((this as unknown) as IProxy)
+					})
+				}
 			})
 		})
 	}

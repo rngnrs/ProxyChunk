@@ -2,7 +2,7 @@ import { Response, Request } from "express"
 
 import { IProxy } from "../types/proxy"
 import { Proxy } from "../models/proxy"
-import shivaRunner from "../shivaRunner"
+import core from "../core"
 
 export const getProxies = async (req: Request, res: Response): Promise<void> => {
 	try {
@@ -15,7 +15,7 @@ export const getProxies = async (req: Request, res: Response): Promise<void> => 
 
 export const addProxies = async (req: Request, res: Response): Promise<void> => {
 	try {
-		shivaRunner.checkMany(req.body.schemes, req.body.addresses, req.body.ports)
+		core.checkMany(req.body.schemes, req.body.addresses, req.body.ports)
 
 		res.status(200).json(req.body)
 	} catch (error) {
