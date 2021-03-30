@@ -1,0 +1,17 @@
+.proxy-list {
+	min-width: 30em;
+	max-width: 50em;
+}
+
+.proxy-list-line {
+	display: flex;
+	padding: 0.25em 0;
+}
+
+.proxy-list-line div {
+	width: 20%;
+}
+
+.proxy-list-line:first-child {
+	background-color: #eef9;
+}
