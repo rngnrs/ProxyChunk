@@ -25,7 +25,7 @@ export default function ProxyList() {
 				<div>Last update</div>
 			</div>
 			{
-				Object.values(proxies).map(p => <Line proxy={p} />)
+				Object.entries(proxies).map(([k, p]) => <Line key={k} proxy={p} />)
 			}
 		</div>
 	)
