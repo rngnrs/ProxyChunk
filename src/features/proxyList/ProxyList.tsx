@@ -16,8 +16,8 @@ export default function ProxyList() {
 
 	return (
 		<div className="proxy-list">
-			{ proxies.length > 0 &&
-				proxies.map(proxy => <Line proxy={ proxy } />)
+			{
+				Object.values(proxies).map(p => <Line proxy={p} />)
 			}
 		</div>
 	)

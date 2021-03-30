@@ -3,11 +3,11 @@ import type { RootState } from '../../app/store'
 import { IProxy } from '../../types'
 
 interface ProxyListState {
-	proxies: IProxy[]
+	proxies: {[key:string]: IProxy}
 }
 
 const initialState: ProxyListState = {
-	proxies: []
+	proxies: {}
 }
 
 export const proxyListSlice = createSlice({
@@ -15,7 +15,9 @@ export const proxyListSlice = createSlice({
 	initialState,
 	reducers: {
 		insertProxies: (state, action: PayloadAction<IProxy[]>) => {
-			state.proxies = [...state.proxies, ...action.payload]
+			action.payload.forEach((proxy) => {
+				state.proxies[`${proxy.scheme}://${proxy.address}:${proxy.port}`] = proxy
+			})
 		}
 	}
 })
