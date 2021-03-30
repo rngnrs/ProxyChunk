@@ -3,7 +3,7 @@ import { spawn } from "child_process"
 import { IProxy } from "../types/proxy"
 import { Proxy } from "../models/proxy"
 
-const shiva = spawn("ProxyShiva", ["-json", "-interactive"])
+const shiva = spawn("ProxyShiva", ["-json", "-interactive", "-skipres"])
 
 shiva.stdin.setDefaultEncoding("utf-8")
 
