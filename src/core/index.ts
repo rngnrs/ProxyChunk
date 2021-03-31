@@ -1,6 +1,5 @@
 import { spawn } from "child_process"
 
-import { IProxy } from "../types/proxy"
 import { Proxy } from "../models/proxy"
 
 const shiva = spawn("ProxyShiva", ["-json", "-interactive", "-skipres"])
@@ -27,7 +26,7 @@ function recheckRoutine() {
 	})
 }
 
-let recheckInterval = setInterval(recheckRoutine, 1e4)
+let recheckInterval = setInterval(recheckRoutine, 1e6)
 
 const checker = {
 	checkOne(scheme: string, address: string, port: number) {

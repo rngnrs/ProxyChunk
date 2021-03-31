@@ -118,9 +118,13 @@ export class Proxy implements IProxy {
 						error ? reject(error) : resolve((this as unknown) as IProxy)
 					})
 				} else {
-					pool.query(queries.insertProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number), (error, results) => {
-						error ? reject(error) : resolve((this as unknown) as IProxy)
-					})
+					if (this.good) {
+						pool.query(queries.insertProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number), (error, results) => {
+							error ? reject(error) : resolve((this as unknown) as IProxy)
+						})
+					} else {
+						reject()
+					}
 				}
 			})
 		})
