@@ -7,7 +7,7 @@ export default function SubmissionForm() {
 	const [inputIPRange, setInputIPRange] = useState(true)
 	const [inputPortRange, setInputPortRange] = useState(true)
 	const [formData, setFormData] = useState({
-		schemes: [] as string[],
+		schemes: ['http'] as string[],
 		addresses: ['127.0.0.1', '127.0.0.1'] as string[],
 		ports: [8080, 8080] as number[]
 	})
@@ -15,9 +15,12 @@ export default function SubmissionForm() {
 	function toggleScheme(scheme: string) {
 		let newSchemes = formData.schemes
 
-		newSchemes.includes(scheme)
-			? newSchemes = newSchemes.filter(s => s !== scheme)
-			: newSchemes.push(scheme)
+		if (newSchemes.includes(scheme)) {
+			if (newSchemes.length == 1) return
+			newSchemes = newSchemes.filter(s => s !== scheme)
+		} else {
+			newSchemes.push(scheme)
+		}
 
 		setFormData({
 			...formData,
