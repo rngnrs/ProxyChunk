@@ -14,3 +14,7 @@ export function num2Word(n: number, words: string[]) {
 			return words[2]
 	}
 }
+
+export function ip2Number(ip: string) {
+	return ip.split('.').reduce((ipInt, octet) => { return (ipInt<<8) + parseInt(octet, 10)}, 0) >>> 0
+}

@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import './SubmissionForm.css'
 import { api } from '../../app/api'
+import { ip2Number } from '../../utils'
 
 export default function SubmissionForm() {
 	const [inputIPRange, setInputIPRange] = useState(false)
@@ -45,6 +46,8 @@ export default function SubmissionForm() {
 
 		if (!inputIPRange) {
 			newAddresses[1] = newAddresses[0]
+		} else if (ip2Number(newAddresses[0]) > ip2Number(newAddresses[1]) && 0 !== ip2Number(newAddresses[index])) {
+			newAddresses[1 - index] = newAddresses[index]
 		}
 
 		setFormData({
@@ -60,6 +63,8 @@ export default function SubmissionForm() {
 
 		if (!inputPortRange) {
 			newPorts[1] = newPorts[0]
+		} else if (newPorts[0] > newPorts[1]) {
+			newPorts[1 - index] = newPorts[index]
 		}
 
 		setFormData({
