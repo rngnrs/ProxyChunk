@@ -1,0 +1,28 @@
+.submission-form {
+	display: grid;
+	grid-template-columns: repeat(1fr, 3);
+	grid-template-rows: repeat(1fr, 3);
+	grid-gap: 1em;
+}
+
+.submission-form > div {
+	grid-row: 2;
+}
+
+.submission-form > .submission-form-title {
+	grid-column: 1/4;
+	grid-row: 1;
+	text-align: center;
+	background-color: #eef9;
+}
+
+.submission-form > .scheme-form {
+	grid-row: 2/4;
+}
+
+.submission-form > .form-submit-button {
+	grid-column: 3;
+	width: 25%;
+	margin-left: 75%;
+	cursor: pointer;
+}

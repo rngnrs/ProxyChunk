@@ -11,5 +11,13 @@ export const api = {
 		} catch (error) {
 			throw new Error(error)
 		}
+	},
+
+	postProxies: async (data: {}): Promise<void> => {
+		try {
+			await axios.post(baseURI + '/proxies', data)
+		} catch (error) {
+			throw new Error(error)
+		}
 	}
 }
