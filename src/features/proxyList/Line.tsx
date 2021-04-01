@@ -34,7 +34,7 @@ export default function ProxyList({ proxy }: { proxy: IProxy }) {
 			<div>{ proxy.scheme }</div>
 			<div>{ proxy.address }</div>
 			<div>{ proxy.port }</div>
-			<div>{ proxy.speed }ms</div>
+			<div>{ proxy.speed.toFixed(2) }ms</div>
 			<div>{ timeDiffToText(timeDiff(proxy.updatedAt)) }</div>
 		</div>
 	)
