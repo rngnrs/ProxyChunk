@@ -1,0 +1,31 @@
+.proxy-list {
+	.proxy-list-line {
+		display: flex;
+		padding: 0.25em 0;
+
+		&:first-child {
+			background-color: #eef9;
+		}
+	}
+
+	&.mobile {
+		width: 100vw;
+
+		.proxy-list-line div {
+			width: 25%;
+		}
+
+		.proxy-list-line div:first-child {
+			width: 50%;
+		}
+	}
+
+	&:not(.mobile) {
+		min-width: 30em;
+		max-width: 50em;
+
+		.proxy-list-line div {
+			width: 20%;
+		}
+	}
+}

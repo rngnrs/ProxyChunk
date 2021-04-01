@@ -29,13 +29,23 @@ function timeDiffToText(ms: number) {
 }
 
 export default function ProxyList({ proxy }: { proxy: IProxy }) {
-	return (
-		<div className="proxy-list-line">
-			<div>{ proxy.scheme }</div>
-			<div>{ proxy.address }</div>
-			<div>{ proxy.port }</div>
-			<div>{ proxy.speed.toFixed(2) }ms</div>
-			<div>{ timeDiffToText(timeDiff(proxy.updatedAt)) }</div>
-		</div>
-	)
+	if (window.innerHeight > window.innerWidth) {
+		return (
+			<div className="proxy-list-line">
+				<div>{ proxy.scheme }://{ proxy.address }:{ proxy.port }</div>
+				<div>{ proxy.speed.toFixed(2) }ms</div>
+				<div>{ timeDiffToText(timeDiff(proxy.updatedAt)) }</div>
+			</div>
+		)
+	} else {
+		return (
+			<div className="proxy-list-line">
+				<div>{ proxy.scheme }</div>
+				<div>{ proxy.address }</div>
+				<div>{ proxy.port }</div>
+				<div>{ proxy.speed.toFixed(2) }ms</div>
+				<div>{ timeDiffToText(timeDiff(proxy.updatedAt)) }</div>
+			</div>
+		)
+	}
 }

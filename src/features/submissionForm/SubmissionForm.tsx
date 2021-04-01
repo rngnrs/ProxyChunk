@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import './SubmissionForm.css'
+import './SubmissionForm.scss'
 import { api } from '../../app/api'
 import { ip2Number } from '../../utils'
 
@@ -78,7 +78,7 @@ export default function SubmissionForm() {
 	}
 
 	return (
-		<form className="submission-form" onSubmit={e => {e.preventDefault(); submit()}}>
+		<form className={`submission-form${window.innerHeight > window.innerWidth ? ' mobile' : ''}`} onSubmit={e => {e.preventDefault(); submit()}}>
 			<div className="submission-form-title">Add proxies</div>
 			<div className="scheme-form">
 				<input type="checkbox" id="http-checkbox" checked={formData.schemes.includes('http')} onChange={() => toggleScheme('http')}/>
