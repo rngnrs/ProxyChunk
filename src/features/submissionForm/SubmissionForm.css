@@ -3,6 +3,7 @@
 	grid-template-columns: repeat(1fr, 3);
 	grid-template-rows: repeat(1fr, 3);
 	grid-gap: 1em;
+	user-select: none;
 }
 
 .submission-form > div {
