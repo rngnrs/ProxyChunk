@@ -21,8 +21,8 @@ const queries = {
 		return `select scheme, address, port, good, speed, created_at as \"createdAt\", updated_at as \"updatedAt\" from proxies where scheme = '${scheme}' and address = '${address}' and port = ${port}`
 	},
 
-	selectProxies: () => {
-		return "select scheme, address, port, good, speed, created_at as \"createdAt\", updated_at as \"updatedAt\" from proxies"
+	selectProxies: (offset: number, limit: number) => {
+		return `select scheme, address, port, good, speed, created_at as \"createdAt\", updated_at as \"updatedAt\" from proxies offset ${offset} limit ${limit}`
 	},
 
 	selectLRC: () => {
@@ -35,6 +35,10 @@ const queries = {
 
 	updateProxy: (scheme: string, address: string, port: number, good = false, speed = -1) => {
 		return `update proxies set good = ${good}, speed = ${speed}, updated_at = ${queries._ts()} where scheme = '${scheme}' and address = '${address}' and port = ${port}`
+	},
+
+	countProxies: () => {
+		return `select count(*) as n from proxies`
 	}
 }
 
@@ -46,6 +50,8 @@ export class Proxy implements IProxy {
 	speed?: number
 	createdAt?: Date
 	updatedAt?: Date
+
+	static _count: number = -1
 
 	constructor(data: {scheme: string, address: string, port: number, good?: boolean, speed?: number, createdAt?: string, updatedAt?: string}) {
 		this.scheme = data.scheme
@@ -69,11 +75,28 @@ export class Proxy implements IProxy {
 		}
 	}
 
-	static find() {
+	static find(n: number, page: number) {
 		return new Promise<IProxy[]>((resolve, reject) => {
-			pool.query(queries.selectProxies(), (error, results) => {
+			pool.query(queries.selectProxies(n * page, n), (error, results) => {
 				error ? reject(error) : resolve(results.rows.map(row => new Proxy(row)))
 			})
+		})
+	}
+
+	static count() {
+		return new Promise<number>((resolve, reject) => {
+			if (Proxy._count > -1) {
+				resolve(Proxy._count)
+			} else {
+				pool.query(queries.countProxies(), (error, results) => {
+					if (error === undefined) {
+						Proxy._count = results.rows[0].n
+						resolve(Proxy._count)
+					} else {
+						reject(error)
+					}
+				})
+			}
 		})
 	}
 
@@ -120,7 +143,15 @@ export class Proxy implements IProxy {
 				} else {
 					if (this.good) {
 						pool.query(queries.insertProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number), (error, results) => {
-							error ? reject(error) : resolve((this as unknown) as IProxy)
+							if (error === undefined) {
+								if (Proxy._count > -1) {
+									++Proxy._count
+								}
+
+								resolve((this as unknown) as IProxy)
+							} else {
+								reject(error)
+							}
 						})
 					} else {
 						reject()
