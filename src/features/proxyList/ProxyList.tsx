@@ -1,19 +1,30 @@
-import { useEffect } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import './ProxyList.scss'
 import { api } from '../../app/api'
-import { insertProxies, selectProxies } from './proxyListSlice'
+import { reinsertProxies, selectProxies } from './proxyListSlice'
 import Line from './Line'
+import Pagination from './Pagination'
 
 export default function ProxyList() {
 	const proxies = useSelector(selectProxies)
 	const dispatch = useDispatch()
+	const [currentPage, setCurrentPage] = useState(0)
+	const [totalPages, setTotalPages] = useState(0)
+
+	const switchToPage = useCallback((i: number) => {
+		api.getProxies(i)
+			.then((data) => {
+				setCurrentPage(data.page)
+				setTotalPages(data.totalPages)
+				dispatch(reinsertProxies(data.proxies))
+			})
+	}, [dispatch])
 
 	useEffect(() => {
-		api.getProxies()
-			.then(proxies => dispatch(insertProxies(proxies)))
-	}, [dispatch])
+		switchToPage(0)
+	}, [switchToPage])
 
 	return (
 		<div className={`proxy-list${window.innerHeight > window.innerWidth ? ' mobile' : ''}`}>
@@ -34,6 +45,7 @@ export default function ProxyList() {
 			{
 				Object.entries(proxies).map(([k, p]) => <Line key={k} proxy={p} />)
 			}
+			<Pagination totalPages={ totalPages } currentPage={ currentPage } switchToPage={ switchToPage } />
 		</div>
 	)
 }

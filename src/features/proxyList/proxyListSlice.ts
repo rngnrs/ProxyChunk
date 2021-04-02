@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { stat } from 'node:fs'
 import type { RootState } from '../../app/store'
 import { IProxy } from '../../types'
 
@@ -14,7 +15,14 @@ export const proxyListSlice = createSlice({
 	name: 'proxyList',
 	initialState,
 	reducers: {
-		insertProxies: (state, action: PayloadAction<IProxy[]>) => {
+		// insertProxies: (state, action: PayloadAction<IProxy[]>) => {
+		// 	action.payload.forEach((proxy) => {
+		// 		state.proxies[`${proxy.scheme}://${proxy.address}:${proxy.port}`] = proxy
+		// 	})
+		// },
+
+		reinsertProxies: (state, action: PayloadAction<IProxy[]>) => {
+			state.proxies = {}
 			action.payload.forEach((proxy) => {
 				state.proxies[`${proxy.scheme}://${proxy.address}:${proxy.port}`] = proxy
 			})
@@ -22,7 +30,7 @@ export const proxyListSlice = createSlice({
 	}
 })
 
-export const { insertProxies } = proxyListSlice.actions
+export const { reinsertProxies } = proxyListSlice.actions
 
 export const selectProxies = (state: RootState) => state.proxyList.proxies
 

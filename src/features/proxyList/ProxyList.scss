@@ -8,6 +8,17 @@
 		}
 	}
 
+	#pagination {
+		display: flex;
+		justify-content: center;
+		gap: 0.5em;
+
+		button {
+			border: none;
+			padding: 0.5em;
+		}
+	}
+
 	&.mobile {
 		width: 100vw;
 
@@ -21,11 +32,14 @@
 	}
 
 	&:not(.mobile) {
-		min-width: 30em;
-		max-width: 50em;
+		min-width: 40em;
 
 		.proxy-list-line div {
 			width: 20%;
+		}
+
+		#pagination button:not([disabled]) {
+			cursor: pointer;
 		}
 	}
 }
