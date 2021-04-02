@@ -3,7 +3,7 @@ import { Response, Request } from "express"
 import { Proxy } from "../models/proxy"
 import core from "../core"
 
-const proxiesPerPage = 10
+const proxiesPerPage = parseInt(process.env.PROXIES_PER_PAGE as string) || 10
 
 export const getProxies = async (req: Request, res: Response): Promise<void> => {
 	try {

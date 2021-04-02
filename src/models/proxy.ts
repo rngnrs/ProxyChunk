@@ -141,7 +141,7 @@ export class Proxy implements IProxy {
 						error ? reject(error) : resolve((this as unknown) as IProxy)
 					})
 				} else {
-					if (this.good) {
+					if (this.good || process.env.SAVE_BAD === 'true') {
 						pool.query(queries.insertProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number), (error, results) => {
 							if (error === undefined) {
 								if (Proxy._count > -1) {

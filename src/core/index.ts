@@ -2,7 +2,21 @@ import { spawn } from "child_process"
 
 import { Proxy } from "../models/proxy"
 
-const shiva = spawn("ProxyShiva", ["-json", "-interactive", "-skipres"])
+const shivaParams = ["-json", "-interactive"]
+
+if (process.env.SKIP_RESERVED === undefined || process.env.SKIP_RESERVED === "true") {
+	shivaParams.push("-skipres")
+}
+
+if (process.env.ANY_CERT === "true") {
+	shivaParams.push("-skipcert")
+}
+
+if (process.env.TIMEOUT !== undefined) {
+	shivaParams.push(`-timeout ${parseInt(process.env.TIMEOUT)}`)
+}
+
+const shiva = spawn("ProxyShiva", shivaParams)
 
 shiva.stdin.setDefaultEncoding("utf-8")
 
