@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { stat } from 'node:fs'
 import type { RootState } from '../../app/store'
 import { IProxy } from '../../types'
 

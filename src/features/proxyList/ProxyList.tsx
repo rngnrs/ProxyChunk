@@ -29,12 +29,12 @@ export default function ProxyList() {
 	return (
 		<div className={`proxy-list${window.innerHeight > window.innerWidth ? ' mobile' : ''}`}>
 			{ window.innerHeight > window.innerWidth
-			? 	<div className="proxy-list-line">
+			? 	<div className="proxy-list-line header">
 					<div>Address</div>
 					<div>Speed</div>
 					<div>Last check</div>
 				</div>
-			:	<div className="proxy-list-line">
+			:	<div className="proxy-list-line header">
 					<div>Scheme</div>
 					<div>Address</div>
 					<div>Port</div>

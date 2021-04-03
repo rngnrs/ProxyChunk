@@ -1,10 +1,13 @@
 .proxy-list {
+	width: 100%;
+
 	.proxy-list-line {
 		display: flex;
 		padding: 0.25em 0;
+		text-align: center;
 
-		&:first-child {
-			background-color: #eef9;
+		div {
+			user-select: all;
 		}
 	}
 
@@ -12,11 +15,6 @@
 		display: flex;
 		justify-content: center;
 		gap: 0.5em;
-
-		button {
-			border: none;
-			padding: 0.5em;
-		}
 	}
 
 	&.mobile {

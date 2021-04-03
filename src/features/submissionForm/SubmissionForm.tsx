@@ -79,7 +79,7 @@ export default function SubmissionForm() {
 
 	return (
 		<form className={`submission-form${window.innerHeight > window.innerWidth ? ' mobile' : ''}`} onSubmit={e => {e.preventDefault(); submit()}}>
-			<div className="submission-form-title">Add proxies</div>
+			<div className="submission-form-title header">Suggest proxies</div>
 			<div className="scheme-form">
 				<input type="checkbox" id="http-checkbox" checked={formData.schemes.includes('http')} onChange={() => toggleScheme('http')}/>
 				<label htmlFor="http-checkbox">HTTP</label>

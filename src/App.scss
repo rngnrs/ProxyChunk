@@ -1,0 +1,63 @@
+header {
+	background-color: #1c1c1c;
+	color: #f8f8f8;
+	font-size: 2rem;
+	line-height: 2rem;
+	padding: 1rem;
+	text-align: center;
+}
+
+#root {
+	background-color: #0c0c0c;
+	background-image: url("./assets/bg.png");
+	color: #f8f8f8;
+	min-height: calc(100vh - 4rem);
+}
+
+.App {
+	background-color: #1c1c1c;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1em;
+
+	&.mobile {
+		box-sizing: border-box;
+		width: 100vw;
+		padding: 0.5em;
+	}
+
+	&:not(.mobile) {
+		padding: 1em;
+		margin-left: 50%;
+		transform: translateX(-50%);
+		border-bottom-left-radius: 0.5rem;
+		border-bottom-right-radius: 0.5rem;
+	}
+}
+
+button, input[type="text"], input[type="number"] {
+	border: none;
+	padding: 0.5rem;
+	border-radius: 0.25rem;
+
+	&:disabled {
+		opacity: 0.5;
+	}
+}
+
+input[type="text"], input[type="number"] {
+	background-color: #f8f8f8;
+	color: #0c0c0c;
+}
+
+button, .header {
+	background-color: #aac2;
+	color: #f8f8f8;
+	text-align: center;
+	padding: 0.5rem;
+}
+
+button {
+	box-shadow: 0 0 1em #aaa2;
+}
