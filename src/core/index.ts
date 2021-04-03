@@ -13,7 +13,7 @@ if (process.env.ANY_CERT === "true") {
 }
 
 if (process.env.TIMEOUT !== undefined) {
-	shivaParams.push(`-timeout ${parseInt(process.env.TIMEOUT)}`)
+	shivaParams.push(`-timeout=${process.env.TIMEOUT}`)
 }
 
 const shiva = spawn("ProxyShiva", shivaParams)
