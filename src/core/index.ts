@@ -26,18 +26,19 @@ shiva.stdout.on("data", (data) => {
 			let proxy = new Proxy(JSON.parse(result))
 			proxy.upsert()
 		} catch(e) {
-			//
+			// Can be ignored
 		}
 	})
 })
 
 function recheckRoutine() {
-	Proxy.findLRC().then((leastRecentlyChecked) => {
-		checker.checkOne(leastRecentlyChecked.scheme, leastRecentlyChecked.address, leastRecentlyChecked.port)
-	})
-	.catch((e) => {
-		//
-	})
+	Proxy.findLRC()
+		.then((leastRecentlyChecked) => {
+			checker.checkOne(leastRecentlyChecked.scheme, leastRecentlyChecked.address, leastRecentlyChecked.port)
+		})
+		.catch((e) => {
+			// Can be ignored
+		})
 }
 
 let recheckInterval = setInterval(recheckRoutine, 1e6)

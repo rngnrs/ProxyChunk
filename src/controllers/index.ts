@@ -8,11 +8,14 @@ const proxiesPerPage = parseInt(process.env.PROXIES_PER_PAGE as string) || 10
 export const getProxies = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const page = parseInt(req.query.page as string) || 0
-		const totalPages = Math.ceil(await Proxy.count() / proxiesPerPage)
+		const totalPages = await Proxy.count()
+			.then(n => Math.ceil(n / proxiesPerPage))
 
 		if (page < totalPages) {
-			const proxies = await Proxy.find(proxiesPerPage, page)
-			res.status(200).json({ proxies, page, totalPages })
+			Proxy.all(proxiesPerPage, page)
+				.then((proxies) => {
+					res.status(200).json({ proxies, page, totalPages })
+				})
 		} else {
 			res.status(404).json({ page, totalPages })
 		}

@@ -9,8 +9,9 @@
 // 	primary key(scheme, address, port)
 // )
 
+import { QueryResult } from "pg"
 import { IProxy } from "./../types/proxy"
-import pool from "./index"
+import { executeQuery } from "./index"
 
 const queries = {
 	_ts: () => {
@@ -75,89 +76,71 @@ export class Proxy implements IProxy {
 		}
 	}
 
-	static find(n: number, page: number) {
-		return new Promise<IProxy[]>((resolve, reject) => {
-			pool.query(queries.selectProxies(n * page, n), (error, results) => {
-				error ? reject(error) : resolve(results.rows.map(row => new Proxy(row)))
+	static async all(n: number, page: number): Promise<IProxy[]> {
+		return executeQuery(queries.selectProxies(n * page, n))
+			.then((result: QueryResult<IProxy>) => {
+				return result.rows
 			})
-		})
 	}
 
-	static count() {
-		return new Promise<number>((resolve, reject) => {
-			if (Proxy._count > -1) {
-				resolve(Proxy._count)
-			} else {
-				pool.query(queries.countProxies(), (error, results) => {
-					if (error === undefined) {
-						Proxy._count = results.rows[0].n
-						resolve(Proxy._count)
-					} else {
-						reject(error)
-					}
-				})
-			}
-		})
-	}
+	static async count(): Promise<number> {
+		if (Proxy._count > -1) {
+			return Proxy._count
+		}
 
-	static findLRC() {
-		return new Promise<IProxy>((resolve, reject) => {
-			pool.query(queries.selectLRC(), (error, results) => {
-				error || results.rows.length < 1 ? reject(error) : resolve(new Proxy(results.rows[0]))
+		return executeQuery(queries.countProxies())
+			.then((result: QueryResult<{n: number}>) => {
+				Proxy._count = result.rows[0].n
+				return Proxy._count
 			})
-		})
+
 	}
 
-	// insert() {
-	// 	return new Promise<IProxy>((resolve, reject) => {
-	// 		pool.query(queries.insertProxy(this.scheme, this.address, this.port), (error, results) => {
-	// 			if (error === undefined) {
-	// 				shivaRunner.checkOne(this.scheme, this.address, this.port)
-	// 				resolve((this as unknown) as IProxy)
-	// 			} else {
-	// 				reject(error)
-	// 			}
-	// 		})
-	// 	})
-	// }
-
-	// update() {
-	// 	return new Promise<IProxy>((resolve, reject) => {
-	// 		pool.query(queries.updateProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number), (error, results) => {
-	// 			if (error === undefined) {
-	// 				resolve((this as unknown) as IProxy)
-	// 			} else {
-	// 				reject(error)
-	// 			}
-	// 		})
-	// 	})
-	// }
-
-	upsert() {
-		return new Promise<IProxy>((resolve, reject) => {
-			pool.query(queries.selectProxy(this.scheme, this.address, this.port), (error, results) => {
-				if (error === undefined && results.rows.length === 1) {
-					pool.query(queries.updateProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number), (error, results) => {
-						error ? reject(error) : resolve((this as unknown) as IProxy)
-					})
-				} else {
-					if (this.good || process.env.SAVE_BAD === 'true') {
-						pool.query(queries.insertProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number), (error, results) => {
-							if (error === undefined) {
-								if (Proxy._count > -1) {
-									++Proxy._count
-								}
-
-								resolve((this as unknown) as IProxy)
-							} else {
-								reject(error)
-							}
-						})
-					} else {
-						reject()
-					}
+	static async findLRC(): Promise<IProxy> {
+		return executeQuery(queries.selectLRC())
+			.then((result: QueryResult<IProxy>) => {
+				if (result.rows.length < 1) {
+					throw "No rows in result"
 				}
+
+				return result.rows[0]
 			})
-		})
+	}
+
+	async insert(): Promise<IProxy> {
+		return executeQuery(queries.insertProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number))
+			.then(() => {
+				if (Proxy._count > -1) {
+					++Proxy._count
+				}
+
+				return this
+			})
+	}
+
+	async update(): Promise<IProxy> {
+		return executeQuery(queries.updateProxy(this.scheme, this.address, this.port, this.good as boolean, this.speed as number))
+			.then(() => {
+				return this
+			})
+	}
+
+	async isInserted(): Promise<boolean> {
+		return executeQuery(queries.selectProxy(this.scheme, this.address, this.port))
+			.then((result: QueryResult<IProxy>) => {
+				return result.rows.length > 0
+			})
+	}
+
+	async upsert(): Promise<IProxy> {
+		if (await this.isInserted()) {
+			return this.update()
+		}
+
+		if (!this.good && process.env.SAVE_BAD !== "true") {
+			throw "The proxy is bad"
+		}
+
+		return this.insert()
 	}
 }
