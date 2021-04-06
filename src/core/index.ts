@@ -24,14 +24,14 @@ shiva.stdout.on("data", (data) => {
 	data.toString().split("\n").forEach((result: string) => {
 		try {
 			let proxy = new Proxy(JSON.parse(result))
-			proxy.upsert()
+			proxy.update()
 		} catch(e) {
 			// Can be ignored
 		}
 	})
 })
 
-function recheckRoutine() {
+function recheckRoutine(): void {
 	Proxy.findLRC()
 		.then((leastRecentlyChecked) => {
 			checker.checkOne(leastRecentlyChecked.scheme, leastRecentlyChecked.address, leastRecentlyChecked.port)
@@ -41,15 +41,19 @@ function recheckRoutine() {
 		})
 }
 
-let recheckInterval = setInterval(recheckRoutine, 1e6)
+let recheckInterval
 
 const checker = {
-	checkOne(scheme: string, address: string, port: number) {
+	checkOne(scheme: string, address: string, port: number): void {
 		shiva.stdin.write(`${scheme}://${address}:${port}\n`)
 	},
 
-	checkMany(schemes: string[], addresses: string[], ports: number[]) {
+	checkMany(schemes: string[], addresses: string[], ports: number[]): void {
 		shiva.stdin.write(`${schemes.join(",")}://${addresses.join("-")}:${ports.join("-")}\n`)
+	},
+
+	startRecheckRoutine(): void {
+		recheckInterval = setInterval(recheckRoutine, 5e4)
 	}
 }
 

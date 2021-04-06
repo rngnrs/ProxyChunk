@@ -133,14 +133,6 @@ export class Proxy implements IProxy {
 	}
 
 	async upsert(): Promise<IProxy> {
-		if (await this.isInserted()) {
-			return this.update()
-		}
-
-		if (!this.good && process.env.SAVE_BAD !== "true") {
-			throw "The proxy is bad"
-		}
-
-		return this.insert()
+		return await this.isInserted() ? this.update() : this.insert()
 	}
 }
