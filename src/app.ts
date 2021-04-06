@@ -4,6 +4,30 @@ import cors from "cors"
 
 import routes from "./routes"
 import checker from "./core"
+import { testDatabaseConnection, createTable } from "./models"
+
+testDatabaseConnection()
+	.catch((error) => {
+		switch (error.code) {
+			case "ECONNREFUSED":
+				console.error(`Couldn't connect to PostgreSQL. Is it running and available under ${error.address}:${error.port}?`)
+				break
+
+			case "42P01":
+				console.error(`Table "proxies" not found, attempting to fix...`)
+				createTable("proxies")
+					.then(() => {
+						console.log(`Table "proxies" successfully created.`)
+					})
+				return
+
+			default:
+				console.error(JSON.stringify(error))
+
+		}
+
+		process.exit(1)
+	})
 
 const app = express()
 const port: string | number = process.env.PORT || 4000

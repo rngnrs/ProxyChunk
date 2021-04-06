@@ -17,3 +17,17 @@ export function executeQuery(query: string): Promise<QueryResult<any>> {
 		})
 	})
 }
+
+export async function testDatabaseConnection(): Promise<QueryResult<any>> {
+	return executeQuery("select * from proxies limit 1")
+}
+
+export async function createTable(tableName: string) {
+	switch (tableName) {
+		case "proxies":
+			return executeQuery(`create table proxies (scheme text, address inet, port smallint, good boolean, speed real, created_at timestamp, updated_at timestamp, primary key(scheme, address, port))`)
+
+		default:
+			throw `Table name ${tableName} is not recognised.`
+	}
+}

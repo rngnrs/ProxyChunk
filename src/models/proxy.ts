@@ -1,14 +1,3 @@
-// create table proxies (
-// 	scheme text,
-// 	address inet,
-// 	port smallint,
-// 	good boolean,
-// 	speed real,
-// 	created_at timestamp,
-// 	updated_at timestamp,
-// 	primary key(scheme, address, port)
-// )
-
 import { QueryResult } from "pg"
 import { IProxy } from "./../types/proxy"
 import { executeQuery } from "./index"
