@@ -19,11 +19,12 @@
 					{
 						"name": "page",
 						"in": "query",
-						"description": "Desired page's index. If this parameter is not present, page with index 0 is returned.",
+						"description": "Desired page's index.",
 						"required": false,
 						"schema": {
 							"type": "integer",
-							"minimum": 0
+							"minimum": 0,
+							"default": 0
 						}
 					}
 				],
@@ -63,20 +64,8 @@
 														"type": "string"
 													}
 												}
-											}
-										},
-										"page": {
-											"type": "integer"
-										},
-										"totalPages": {
-											"type": "integer"
-										}
-									}
-								},
-								"examples": {
-									"DB has 2 proxies saved": {
-										"value": {
-											"proxies": [
+											},
+											"example": [
 												{
 													"scheme": "http",
 													"address": "123.123.123.123",
@@ -95,9 +84,15 @@
 													"createdAt": "",
 													"updatedAt": ""
 												}
-											],
-											"page": 0,
-											"totalPages": 1
+											]
+										},
+										"page": {
+											"type": "integer",
+											"example": 0
+										},
+										"totalPages": {
+											"type": "integer",
+											"example": 1
 										}
 									}
 								}
@@ -160,6 +155,7 @@
 									"minItems": 1,
 									"maxItems": 4,
 									"uniqueItems": true,
+									"example": ["http", "https", "socks4", "socks5"],
 									"items": {
 										"type": "string",
 										"pattern": "^https?|socks[45]$"
@@ -170,6 +166,7 @@
 									"description": "Low and high boundary addresses, all the in-betweens and both boundaries will be checked.",
 									"minItems": 2,
 									"maxItems": 2,
+									"example": ["123.123.123.123", "123.123.123.130"],
 									"items": {
 										"type": "string",
 										"pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
@@ -180,20 +177,12 @@
 									"description": "Low and high boundary ports, all the in-betweens and both boundaries will be checked.",
 									"minItems": 2,
 									"maxItems": 2,
+									"example": [8080, 8090],
 									"items": {
 										"type": "integer",
 										"minimum": 0,
 										"maximum": 65535
 									}
-								}
-							}
-						},
-						"examples": {
-							"Example": {
-								"value": {
-									"schemes": ["http", "https", "socks5"],
-									"addresses": ["123.123.123.123", "123.123.123.130"],
-									"ports": [8080, 8090]
 								}
 							}
 						}
@@ -209,30 +198,38 @@
 									"properties": {
 										"schemes": {
 											"type": "array",
+											"description": "An array of schemes.",
+											"minItems": 1,
+											"maxItems": 4,
+											"uniqueItems": true,
+											"example": ["http", "https", "socks4", "socks5"],
 											"items": {
-												"type": "string"
+												"type": "string",
+												"pattern": "^https?|socks[45]$"
 											}
 										},
 										"addresses": {
 											"type": "array",
+											"description": "Low and high boundary addresses, all the in-betweens and both boundaries will be checked.",
+											"minItems": 2,
+											"maxItems": 2,
+											"example": ["123.123.123.123", "123.123.123.130"],
 											"items": {
-												"type": "string"
+												"type": "string",
+												"pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
 											}
 										},
 										"ports": {
 											"type": "array",
+											"description": "Low and high boundary ports, all the in-betweens and both boundaries will be checked.",
+											"minItems": 2,
+											"maxItems": 2,
+											"example": [8080, 8090],
 											"items": {
-												"type": "integer"
+												"type": "integer",
+												"minimum": 0,
+												"maximum": 65535
 											}
-										}
-									}
-								},
-								"examples": {
-									"Example": {
-										"value": {
-											"schemes": ["http", "https", "socks5"],
-											"addresses": ["123.123.123.123", "123.123.123.130"],
-											"ports": [8080, 8090]
 										}
 									}
 								}
