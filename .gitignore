@@ -1,8 +1,11 @@
-.DS_Store
+# Dependencies
 node_modules
-/dist
 
-# local env files
+# Builds
+dist
+build
+
+# env files
 .env
 
 # Log files
