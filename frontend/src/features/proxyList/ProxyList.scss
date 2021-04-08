@@ -1,0 +1,43 @@
+.proxy-list {
+	width: 100%;
+
+	.proxy-list-line {
+		display: flex;
+		padding: 0.25em 0;
+		text-align: center;
+
+		div {
+			user-select: all;
+		}
+	}
+
+	#pagination {
+		display: flex;
+		justify-content: center;
+		gap: 0.5em;
+	}
+
+	&.mobile {
+		width: 100vw;
+
+		.proxy-list-line div {
+			width: 25%;
+		}
+
+		.proxy-list-line div:first-child {
+			width: 50%;
+		}
+	}
+
+	&:not(.mobile) {
+		min-width: 40em;
+
+		.proxy-list-line div {
+			width: 20%;
+		}
+
+		#pagination button:not([disabled]) {
+			cursor: pointer;
+		}
+	}
+}
