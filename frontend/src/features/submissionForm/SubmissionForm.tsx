@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 
 import './SubmissionForm.scss'
 import { api } from '../../app/api'
@@ -75,6 +76,7 @@ export default function SubmissionForm() {
 
 	function submit() {
 		api.postProxies(formData)
+		toast('Thank you! Suggested proxies will be saved and checked soon.')
 	}
 
 	return (
