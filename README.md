@@ -54,6 +54,9 @@ node ./dist/js/app.js
 ```
 3. Visit http://localhost:80 and voilà.
 
+## API
+You can find OpenAPI documentation [here](https://gitlab.com/man90/proxychunk/-/blob/master/backend/doc/api/openapi.json).
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
