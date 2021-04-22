@@ -43,7 +43,8 @@
 												"type": "object",
 												"properties": {
 													"scheme": {
-														"type": "string"
+														"type": "string",
+														"enum": ["http", "https", "socks4", "socks5"]
 													},
 													"address": {
 														"type": "string"
@@ -155,10 +156,9 @@
 									"minItems": 1,
 									"maxItems": 4,
 									"uniqueItems": true,
-									"example": ["http", "https", "socks4", "socks5"],
 									"items": {
 										"type": "string",
-										"pattern": "^https?|socks[45]$"
+										"enum": ["http", "https", "socks4", "socks5"]
 									}
 								},
 								"addresses": {
@@ -202,10 +202,9 @@
 											"minItems": 1,
 											"maxItems": 4,
 											"uniqueItems": true,
-											"example": ["http", "https", "socks4", "socks5"],
 											"items": {
 												"type": "string",
-												"pattern": "^https?|socks[45]$"
+												"enum": ["http", "https", "socks4", "socks5"]
 											}
 										},
 										"addresses": {
