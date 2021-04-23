@@ -25,7 +25,7 @@ shiva.stdout.on("data", (data) => {
 		try {
 			let proxy = new Proxy(JSON.parse(result))
 			proxy.update()
-		} catch(e) {
+		} catch {
 			// Can be ignored
 		}
 	})
@@ -36,7 +36,7 @@ function recheckRoutine(): void {
 		.then((leastRecentlyChecked) => {
 			checker.checkOne(leastRecentlyChecked.scheme, leastRecentlyChecked.address, leastRecentlyChecked.port)
 		})
-		.catch((e) => {
+		.catch(() => {
 			// Can be ignored
 		})
 }

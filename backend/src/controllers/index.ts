@@ -21,7 +21,7 @@ export const getProxies = async (req: Request, res: Response): Promise<void> => 
 		}
 
 	} catch (error) {
-		throw error
+		console.error(error)
 	}
 }
 
@@ -33,7 +33,7 @@ export const addProxies = async (req: Request, res: Response): Promise<void> => 
 					let proxy = new Proxy({scheme, address: number2ip(address), port})
 
 					proxy.insert()
-						.catch((error) => {
+						.catch(() => {
 							// Throws an error if the proxy is already in the db
 							// No need to do anything
 						})
@@ -43,7 +43,7 @@ export const addProxies = async (req: Request, res: Response): Promise<void> => 
 
 		res.status(200).json(req.body)
 	} catch (error) {
-		throw error
+		console.error(error)
 	}
 }
 
