@@ -12,7 +12,7 @@ const queries = {
 	},
 
 	selectProxies: (offset: number, limit: number) => {
-		return `select scheme, address, port, good, speed, created_at as \"createdAt\", updated_at as \"updatedAt\" from proxies offset ${offset} limit ${limit}`
+		return `select scheme, address, port, good, speed, created_at as \"createdAt\", updated_at as \"updatedAt\" from proxies order by updated_at desc offset ${offset} limit ${limit}`
 	},
 
 	selectLRC: () => {
@@ -47,14 +47,8 @@ export class Proxy implements IProxy {
 		this.scheme = data.scheme
 		this.address = data.address
 		this.port = data.port
-
-		if (data.good !== undefined) {
-			this.good = data.good
-		}
-
-		if (data.speed !== undefined) {
-			this.speed = data.speed
-		}
+		this.good = data.good
+		this.speed = data.speed
 
 		if (data.createdAt !== undefined) {
 			this.createdAt = new Date(data.createdAt)
