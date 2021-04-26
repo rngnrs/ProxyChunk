@@ -13,9 +13,9 @@ export const api = {
 		}
 	},
 
-	postProxies: async (data: {}): Promise<void> => {
+	postProxies: async ({schemes, addresses, ports}: {schemes: Set<string>, addresses: [string, string], ports: [number, number]}): Promise<void> => {
 		try {
-			await axios.post(baseURI + '/proxies', data)
+			await axios.post(baseURI + '/proxies', {schemes: Array.from(schemes), addresses, ports})
 		} catch (error) {
 			throw new Error(error)
 		}
