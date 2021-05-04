@@ -26,6 +26,9 @@ ANY_CERT=false
 
 # After how many seconds a proxy is considered bad
 TIMEOUT=5
+
+# Port to which backend will listen to
+PORT=4000
 ```
 4. Execute this in *both* the backend and frontend directories:
 ```bash
