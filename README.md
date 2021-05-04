@@ -41,7 +41,14 @@ server {
 	listen 80;
 	server_name local;
 
+	# Change this to where you have it
 	root /path/to/where/you/have/ProxyChunk/frontend/build;
+
+	location /api/ {
+		# Change the port number to the one backend listens to
+		# It's 4000 unless you specified something else in step 3
+		proxy_pass http://127.0.0.1:4000/;
+	}
 
 	location / {
 		index index.html;

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { IProxy } from '../types'
 
-const baseURI: string = 'http://192.168.0.18:4000/api'
+const baseURI: string = './api'
 
 export const api = {
 	getProxies: async (page: number = 0): Promise<{page: number, totalPages: number, proxies: IProxy[]}> => {
