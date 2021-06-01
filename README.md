@@ -12,35 +12,9 @@ ProxyChunk is a web-based open proxy checker and aggregator app.
 ### Installation
 
 1. Install [proxyshiva](https://github.com/octoman90/proxyshiva) and make sure it is in your [PATH](<https://en.wikipedia.org/wiki/PATH_(variable)>).
-2. Install PostgreSQL, then create a user and database for ProxyChunk to use.
-3. Create a file with the name ".env" in the backend directory using this template:
-
-```
-# Self-explanatory
-POSTGRES_USER=username
-POSTGRES_PASSWORD=password
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_DB=proxychunk
-
-# A limit to how many proxies GET /api/proxies will return for each ?page
-PROXIES_PER_PAGE=20
-
-# Set to true to ignore IP addresses from reserved ranges
-# https://en.wikipedia.org/wiki/Reserved_IP_addresses
-SKIP_RESERVED=true
-
-# Set to true to not check proxies' certificates
-ANY_CERT=false
-
-# After how many seconds a proxy is considered bad
-TIMEOUT=5
-
-# Port to which backend will listen to
-PORT=4000
-```
-
-4. Execute this in _both_ the backend and frontend directories:
+2. Install PostgreSQL, then create a user and a database for ProxyChunk to use.
+3. In the backend directory, copy the `.env.template` file into `.env` and replace the configuration options with applicable.
+4. Execute these commands in _both_ the backend and frontend directories:
 
 ```bash
 yarn install
