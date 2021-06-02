@@ -1,11 +1,5 @@
 {
-	"name": "ProxyChunk-frontend",
-	"version": "0.1.0",
 	"private": true,
-	"repository": "git@gitlab.com:ProxyChunk/ProxyChunk-frontend.git",
-	"author": "man90 <man90@tuta.io>",
-	"license": "MIT",
-	"description": "A web application that keeps track of public user-submitted proxy servers.",
 	"dependencies": {
 		"@reduxjs/toolkit": "^1.5.1",
 		"@types/node": "^15.6.1",
@@ -22,8 +16,7 @@
 	},
 	"scripts": {
 		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"eject": "react-scripts eject"
+		"build": "react-scripts build"
 	},
 	"eslintConfig": {
 		"extends": "react-app"

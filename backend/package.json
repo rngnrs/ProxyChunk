@@ -1,12 +1,5 @@
 {
-	"name": "ProxyChunk-backend",
-	"version": "0.1.0",
 	"private": true,
-	"main": "app.ts",
-	"repository": "git@gitlab.com:ProxyChunk/ProxyChunk-backend.git",
-	"author": "man90 <man90@tuta.io>",
-	"license": "MIT",
-	"description": "A web application that keeps track of public user-submitted proxy servers.",
 	"dependencies": {
 		"body-parser": "^1.19.0",
 		"cors": "^2.8.5",
@@ -24,7 +17,7 @@
 		"nodemon": "^2.0.7"
 	},
 	"scripts": {
-		"build": "tsc",
-		"start": "concurrently \"tsc -w\" \"nodemon --signal SIGTERM dist/js/app.js\""
+		"start": "concurrently \"tsc -w\" \"nodemon --signal SIGTERM dist/js/app.js\"",
+		"build": "tsc"
 	}
 }

@@ -1,0 +1,13 @@
+{
+	"name": "proxychunk",
+	"version": "0.1.0",
+	"private": true,
+	"repository": "git@gitlab.com:man90/ProxyChunk.git",
+	"author": "man90 <man90@tuta.io>",
+	"license": "MIT",
+	"description": "A web application that keeps track of public user-submitted proxy servers.",
+	"scripts": {
+		"build": "./scripts/build.sh",
+		"start": "node ./backend/dist/js/app.js"
+	}
+}
