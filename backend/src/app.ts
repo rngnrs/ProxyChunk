@@ -13,6 +13,14 @@ testDatabaseConnection()
 				console.error(`Couldn't connect to PostgreSQL. Is it running and available under ${error.address}:${error.port}?`)
 				break
 
+			case "28000":
+				console.error(`Couldn't access PostgreSQL. Are the username and password correct?`)
+				break
+
+			case "3D000":
+				console.error(`Couldn't access the PostgreSQL database "${process.env.POSTGRES_DB}". Does it exist?`)
+				break
+
 			case "42P01":
 				console.error(`Table "proxies" not found, attempting to fix...`)
 				createTable("proxies")
