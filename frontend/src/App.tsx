@@ -1,14 +1,29 @@
-import './App.scss'
-import ProxyList from './features/proxyList/ProxyList'
-import SubmissionForm from './features/submissionForm/SubmissionForm'
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route,
+} from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
+
+import AdminPage from './views/Admin'
+import HomePage from './views/Home'
+import './App.scss'
+
 
 export default function App() {
 	return (
-		<div className={`App${window.innerHeight > window.innerWidth ? ' mobile' : ''}`}>
-			<ProxyList />
-			<SubmissionForm />
+		<>
+			<Router>
+				<Switch>
+					<Route path="/admin">
+						<AdminPage />
+					</Route>
+					<Route path="/">
+						<HomePage />
+					</Route>
+				</Switch>
+			</Router>
 			<Toaster />
-		</div>
+		</>
 	)
 }
