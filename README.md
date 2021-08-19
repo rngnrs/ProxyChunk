@@ -15,7 +15,7 @@ ProxyChunk is a web-based open proxy checker and aggregator app.
 
 1. Install [proxyshiva](https://github.com/octoman90/proxyshiva) and make sure it is in your [PATH](<https://en.wikipedia.org/wiki/PATH_(variable)>).
 2. Create a user and a database in PostgreSQL for ProxyChunk to use.
-3. Run `yarn build` command. Your system editor will be opened allowing you to change the configuration. You can change it later by editing the `backend/.env` file.
+3. Run `yarn build` command. Your system editor will be opened twice allowing you to change backend and frontend configuration. You can change it later by editing the `backend/.env` and `frontend/.env` files.
 4. Point Nginx to serve files from the `frontend/build` directory using this snippet:
 
 ```
@@ -23,14 +23,8 @@ server {
 	listen 80;
 	server_name local;
 
-	# Change this to where you have it
+	# Change this to where you have the frontend build directory
 	root /path/to/where/you/have/ProxyChunk/frontend/build;
-
-	location /api/ {
-		# Change the port number to the one backend listens to
-		# It's 4000 unless you specified something else in step 3
-		proxy_pass http://127.0.0.1:4000/;
-	}
 
 	location / {
 		index index.html;
