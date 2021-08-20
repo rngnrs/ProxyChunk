@@ -28,6 +28,7 @@ export const getProxies = async (req: Request, res: Response): Promise<void> => 
 export const addProxies = async (req: Request, res: Response): Promise<void> => {
 	if ((req.session as any).loggedIn !== true || (req.session as any).user !== "admin") {
 		res.status(401).end()
+		return
 	}
 
 	try {
