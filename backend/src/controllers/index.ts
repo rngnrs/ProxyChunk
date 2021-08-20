@@ -26,6 +26,10 @@ export const getProxies = async (req: Request, res: Response): Promise<void> => 
 }
 
 export const addProxies = async (req: Request, res: Response): Promise<void> => {
+	if ((req.session as any).loggedIn !== true || (req.session as any).user !== "admin") {
+		res.status(401).end()
+	}
+
 	try {
 		req.body.schemes.forEach((scheme: string) => {
 			for (let port = req.body.ports[0]; port <= req.body.ports[1]; ++port) {
@@ -41,9 +45,24 @@ export const addProxies = async (req: Request, res: Response): Promise<void> => 
 			}
 		})
 
-		res.status(200).json(req.body)
+		res.status(202).end()
 	} catch (error) {
 		console.error(error)
+	}
+}
+
+export const login = async (req: Request, res: Response): Promise<void> => {
+	if ((req.session as any).loggedIn === true) {
+		res.status(200).json({ user: (req.session as any).user })
+	} else {
+		if (req.body.accessCode === process.env.ADMIN_ACCESS_CODE) {
+			(req.session as any).loggedIn = true as boolean
+			(req.session as any).user = "admin"
+
+			res.status(200).json({ user: "admin" })
+		} else {
+			res.status(401).end()
+		}
 	}
 }
 
