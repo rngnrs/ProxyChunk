@@ -17,5 +17,9 @@ export const api = {
 		} catch (error) {
 			throw new Error(error)
 		}
-	}
+	},
+
+	login: async ({accessCode}: {accessCode?: string} = {}): Promise<{user: string}> => {
+		return axios.post(`${process.env.REACT_APP_API_ENDPOINT}/login`, {accessCode})
+	},
 }
