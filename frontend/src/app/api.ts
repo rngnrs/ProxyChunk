@@ -13,13 +13,21 @@ export const api = {
 
 	postProxies: async ({schemes, addresses, ports}: {schemes: Set<string>, addresses: [string, string], ports: [number, number]}): Promise<void> => {
 		try {
-			await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/proxies`, {schemes: Array.from(schemes), addresses, ports})
+			await axios.post(
+				`${process.env.REACT_APP_API_ENDPOINT}/proxies`,
+				{ schemes: Array.from(schemes), addresses, ports },
+				{ withCredentials: true }
+			)
 		} catch (error) {
 			throw new Error(error)
 		}
 	},
 
 	login: async ({accessCode}: {accessCode?: string} = {}): Promise<{user: string}> => {
-		return axios.post(`${process.env.REACT_APP_API_ENDPOINT}/login`, {accessCode})
+		return axios.post(
+			`${process.env.REACT_APP_API_ENDPOINT}/login`,
+			{ accessCode },
+			{ withCredentials: true }
+		)
 	},
 }

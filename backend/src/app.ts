@@ -50,7 +50,10 @@ if (app.get("env") === "production") {
 	sess.cookie.secure = true // serve secure cookies
 }
 
-app.use(cors())
+app.use(cors({
+	origin: process.env.CORS_ORIGIN || "http://127.0.0.1:3000",
+	credentials: true,
+}))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(session(sess))
