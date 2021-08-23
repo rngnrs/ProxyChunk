@@ -11,7 +11,7 @@ header {
 	background-color: #0c0c0c;
 	background-image: url("./assets/bg.png");
 	color: #f8f8f8;
-	min-height: calc(100vh - 4rem);
+	min-height: 100vh;
 }
 
 .App {
@@ -60,4 +60,20 @@ button, .header {
 
 button {
 	box-shadow: 0 0 1em #aaa2;
+}
+
+footer {
+	position: fixed;
+	bottom: 0;
+	padding: 1em;
+	box-sizing: border-box;
+	display: flex;
+	width: 100vw;
+	justify-content: flex-end;
+	background-color: #1c1c1c;
+}
+
+a {
+	color: #f8f8f8;
+	text-decoration: none;
 }
