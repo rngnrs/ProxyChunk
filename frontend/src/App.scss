@@ -71,9 +71,15 @@ footer {
 	width: 100vw;
 	justify-content: flex-end;
 	background-color: #1c1c1c;
+	gap: 1em;
 }
 
 a {
 	color: #f8f8f8;
 	text-decoration: none;
+	opacity: 0.8;
+
+	&:hover {
+		opacity: 1;
+	}
 }
