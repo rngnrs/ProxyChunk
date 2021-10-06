@@ -18,11 +18,7 @@ export function executeQuery(query: string): Promise<QueryResult<any>> {
 	})
 }
 
-export async function testDatabaseConnection(): Promise<QueryResult<any>> {
-	return executeQuery("select * from proxies limit 1")
-}
-
-export async function createTable(tableName: string) {
+async function createTable(tableName: string) {
 	switch (tableName) {
 		case "proxies":
 			return executeQuery(`create table proxies (scheme text, address inet, port smallint, good boolean, speed real, created_at timestamp, updated_at timestamp, primary key(scheme, address, port))`)
@@ -31,3 +27,39 @@ export async function createTable(tableName: string) {
 			throw `Table name ${tableName} is not recognised.`
 	}
 }
+
+export async function testDatabaseConnection(): Promise<void> {
+	return executeQuery("select * from proxies limit 1")
+		.then(() => {
+			return
+		})
+		.catch((error) => {
+			switch (error.code) {
+				case "ECONNREFUSED":
+					console.error(`Couldn't connect to PostgreSQL. Is it running and available under ${error.address}:${error.port}?`)
+					break
+
+				case "28000":
+					console.error(`Couldn't access PostgreSQL. Are the username and password correct?`)
+					break
+
+				case "3D000":
+					console.error(`Couldn't access the PostgreSQL database "${process.env.POSTGRES_DB}". Does it exist?`)
+					break
+
+				case "42P01":
+					console.error(`Table "proxies" not found, attempting to fix...`)
+					createTable("proxies")
+						.then(() => {
+							console.log(`Table "proxies" successfully created.`)
+						})
+					return
+
+				default:
+					console.error(JSON.stringify(error))
+
+			}
+
+			process.exit(1)
+		})
+	}
