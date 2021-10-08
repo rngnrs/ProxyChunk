@@ -3,9 +3,12 @@ import axios from 'axios'
 import { IProxy } from '../types'
 
 export const api = {
-	getProxies: async (page: number = 0): Promise<{page: number, totalPages: number, proxies: IProxy[]}> => {
+	getProxies: async (page: number = 0, goodOnly: boolean = true): Promise<{page: number, totalPages: number, proxies: IProxy[]}> => {
 		try {
-			return axios.get(`${process.env.REACT_APP_API_ENDPOINT}/proxies?page=${page}`).then(response => response.data)
+			return axios.get(
+				`${process.env.REACT_APP_API_ENDPOINT}/proxies?page=${page}&goodOnly=${goodOnly}`,
+				{ withCredentials: true }
+			).then(response => response.data)
 		} catch (error) {
 			throw new Error(error)
 		}

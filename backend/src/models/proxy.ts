@@ -11,8 +11,12 @@ const queries = {
 		return `select scheme, address, port, good, speed, created_at as \"createdAt\", updated_at as \"updatedAt\" from proxies where scheme = '${scheme}' and address = '${address}' and port = ${port}`
 	},
 
-	selectProxies: (offset: number, limit: number) => {
+	selectAllProxies: (offset: number, limit: number) => {
 		return `select scheme, address, port, good, speed, created_at as \"createdAt\", updated_at as \"updatedAt\" from proxies order by updated_at desc offset ${offset} limit ${limit}`
+	},
+
+	selectGoodProxies: (offset: number, limit: number) => {
+		return `select scheme, address, port, good, speed, created_at as \"createdAt\", updated_at as \"updatedAt\" from proxies where speed > 0 order by updated_at desc offset ${offset} limit ${limit}`
 	},
 
 	selectLRC: () => {
@@ -59,8 +63,9 @@ export class Proxy implements IProxy {
 		}
 	}
 
-	static async all(n: number, page: number): Promise<IProxy[]> {
-		return executeQuery(queries.selectProxies(n * page, n))
+	static async getMany(n: number, page: number, goodOnly: boolean = true): Promise<IProxy[]> {
+		const offset = n * page
+		return executeQuery(goodOnly ? queries.selectGoodProxies(offset, n) : queries.selectAllProxies(offset, n))
 			.then((result: QueryResult<IProxy>) => {
 				return result.rows
 			})

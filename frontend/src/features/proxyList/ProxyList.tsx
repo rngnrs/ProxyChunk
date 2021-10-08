@@ -7,14 +7,14 @@ import { reinsertProxies, selectProxies } from './proxyListSlice'
 import Line from './Line'
 import Pagination from './Pagination'
 
-export default function ProxyList() {
+export default function ProxyList({ goodOnly }: { goodOnly: boolean }) {
 	const proxies = useSelector(selectProxies)
 	const dispatch = useDispatch()
 	const [currentPage, setCurrentPage] = useState(0)
 	const [totalPages, setTotalPages] = useState(0)
 
 	const switchToPage = useCallback((i: number) => {
-		api.getProxies(i)
+		api.getProxies(i, goodOnly)
 			.then((data) => {
 				setCurrentPage(data.page)
 				setTotalPages(data.totalPages)

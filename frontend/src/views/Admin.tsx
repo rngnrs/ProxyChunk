@@ -12,7 +12,7 @@ export default function App() {
 			{
 				loggedIn
 				? <>
-					<ProxyList />
+					<ProxyList goodOnly={ false } />
 					<SubmissionForm />
 				</>
 				: <LoginForm loginHandler={(l: boolean) => setLoggedIn(l)} />
