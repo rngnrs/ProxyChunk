@@ -25,7 +25,7 @@ export default function App() {
 				</Route>
 			</Switch>
 			<footer>
-				<a href="https://github.com/octoman90/ProxyChunk" target="_blank">Star project on Github</a>
+				<a href="https://github.com/octoman90/ProxyChunk" target="_blank" rel="noreferrer">Star project on Github</a>
 				<Link to="/admin">Control panel</Link>
 			</footer>
 		</Router>
