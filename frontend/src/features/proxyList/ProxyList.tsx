@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useEffect, useState, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -25,6 +26,14 @@ export default function ProxyList({ goodOnly }: { goodOnly: boolean }) {
 	useEffect(() => {
 		switchToPage(0)
 	}, [switchToPage])
+
+	if (Object.entries(proxies).length === 0) {
+		return (
+			<div className={'proxy-list'}>
+				Ain't nobody here but us chickens! Proxies can be added to the pool at the <Link to="/admin">control panel</Link>.
+			</div>
+		)
+	}
 
 	return (
 		<div className={`proxy-list${window.innerHeight > window.innerWidth ? ' mobile' : ''}`}>
