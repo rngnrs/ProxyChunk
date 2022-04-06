@@ -21,7 +21,7 @@ export default function ProxyList({ goodOnly }: { goodOnly: boolean }) {
 				setTotalPages(data.totalPages)
 				dispatch(reinsertProxies(data.proxies))
 			})
-	}, [dispatch])
+	}, [dispatch, goodOnly])
 
 	useEffect(() => {
 		switchToPage(0)
