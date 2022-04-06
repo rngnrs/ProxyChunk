@@ -7,6 +7,10 @@ function Button({ n, selected, onClick }: { n: number, selected: boolean, onClic
 }
 
 export default function Pagination({ totalPages, currentPage, switchToPage }: { totalPages: number, currentPage: number, switchToPage: (i: number) => void }) {
+	if (totalPages === 1) {
+		return null
+	}
+
 	return (
 		<div id="pagination">
 			{
