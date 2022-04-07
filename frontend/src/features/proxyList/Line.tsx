@@ -28,12 +28,24 @@ function timeDiffToText(ms: number) {
 	return `${days} ${num2Word(days, ['day', 'days'])} ago`
 }
 
+function SpeedDiv({ speed }: { speed: number }) {
+	let formattedSpeed: string
+
+	if (speed < 0) {
+		formattedSpeed = "Bad"
+	} else {
+		formattedSpeed = speed.toFixed(2) + "ms"
+	}
+
+	return <div>{ formattedSpeed }</div>
+}
+
 export default function ProxyList({ proxy }: { proxy: IProxy }) {
 	if (window.innerHeight > window.innerWidth) {
 		return (
 			<div className="proxy-list-line">
 				<div>{ proxy.scheme }://{ proxy.address }:{ proxy.port }</div>
-				<div>{ proxy.speed.toFixed(2) }ms</div>
+				<SpeedDiv speed={ proxy.speed } />
 				<div>{ timeDiffToText(timeDiff(proxy.updatedAt)) }</div>
 			</div>
 		)
@@ -43,7 +55,7 @@ export default function ProxyList({ proxy }: { proxy: IProxy }) {
 				<div>{ proxy.scheme }</div>
 				<div>{ proxy.address }</div>
 				<div>{ proxy.port }</div>
-				<div>{ proxy.speed.toFixed(2) }ms</div>
+				<SpeedDiv speed={ proxy.speed } />
 				<div>{ timeDiffToText(timeDiff(proxy.updatedAt)) }</div>
 			</div>
 		)
