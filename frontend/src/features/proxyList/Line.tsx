@@ -42,23 +42,21 @@ function TimeDiffDiv({ updatedAt }: { updatedAt: Date }) {
 }
 
 export default function ProxyList({ proxy }: { proxy: IProxy }) {
-	if (window.innerHeight > window.innerWidth) {
-		return (
-			<div className="proxy-list-line">
-				<div>{ proxy.scheme }://{ proxy.address }:{ proxy.port }</div>
-				<SpeedDiv speed={ proxy.speed } />
-				<TimeDiffDiv updatedAt={ proxy.updatedAt }/>
-			</div>
-		)
-	} else {
-		return (
-			<div className="proxy-list-line">
-				<div>{ proxy.scheme }</div>
-				<div>{ proxy.address }</div>
-				<div>{ proxy.port }</div>
-				<SpeedDiv speed={ proxy.speed } />
-				<TimeDiffDiv updatedAt={ proxy.updatedAt }/>
-			</div>
-		)
-	}
+	return (
+		<div className="proxy-list-line">
+			{
+				window.innerHeight > window.innerWidth
+				? <div>{ proxy.scheme }://{ proxy.address }:{ proxy.port }</div>
+				: (
+					<>
+						<div>{ proxy.scheme }</div>
+						<div>{ proxy.address }</div>
+						<div>{ proxy.port }</div>
+					</>
+				)
+			}
+			<SpeedDiv speed={ proxy.speed } />
+			<TimeDiffDiv updatedAt={ proxy.updatedAt }/>
+		</div>
+	)
 }
