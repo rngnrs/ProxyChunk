@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import './ProxyList.scss'
 import { api } from '../../app/api'
 import { reinsertProxies, selectProxies } from './proxyListSlice'
+import HederLine from './HeaderLine'
 import Line from './Line'
 import Pagination from './Pagination'
 
@@ -37,23 +38,8 @@ export default function ProxyList({ goodOnly }: { goodOnly: boolean }) {
 
 	return (
 		<div className={`proxy-list${window.innerHeight > window.innerWidth ? ' mobile' : ''}`}>
-			{ window.innerHeight > window.innerWidth
-			? 	<div className="proxy-list-line header">
-					<div>Address</div>
-					<div>Speed</div>
-					<div>Last check</div>
-				</div>
-			:	<div className="proxy-list-line header">
-					<div>Scheme</div>
-					<div>Address</div>
-					<div>Port</div>
-					<div>Speed</div>
-					<div>Last check</div>
-				</div>
-			}
-			{
-				Object.entries(proxies).map(([k, p]) => <Line key={k} proxy={p} />)
-			}
+			<HederLine />
+			{ Object.entries(proxies).map(([k, p]) => <Line key={k} proxy={p} />) }
 			<Pagination totalPages={ totalPages } currentPage={ currentPage } switchToPage={ switchToPage } />
 		</div>
 	)
