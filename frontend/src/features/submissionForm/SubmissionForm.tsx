@@ -5,11 +5,24 @@ import './SubmissionForm.scss'
 import { api } from '../../app/api'
 import { ip2Number } from '../../utils'
 
+const schemes = ['http', 'https', 'socks4', 'socks5']
+
+function PortCheckbox({ scheme, checkedSchemes, onChange }: { scheme: string, checkedSchemes: Set<string>, onChange: (scheme: string) => void }) {
+	const id = `${scheme}-checkbox`
+
+	return (
+		<div>
+			<input type="checkbox" id={id} checked={checkedSchemes.has(scheme)} onChange={() => onChange(scheme)} />
+			<label htmlFor={id}>{scheme.toUpperCase()}</label>
+		</div>
+	)
+}
+
 export default function SubmissionForm() {
 	const [inputIPRange, setInputIPRange] = useState(false)
 	const [inputPortRange, setInputPortRange] = useState(false)
 	const [formData, setFormData] = useState({
-		schemes: new Set(['http']) as Set<string>,
+		schemes: new Set([schemes[0]]) as Set<string>,
 		addresses: ['127.0.0.1', '127.0.0.1'] as [string, string],
 		ports: [8080, 8080] as [number, number]
 	})
@@ -80,36 +93,28 @@ export default function SubmissionForm() {
 	}
 
 	return (
-		<form className={`submission-form${window.innerHeight > window.innerWidth ? ' mobile' : ''}`} onSubmit={e => {e.preventDefault(); submit()}}>
+		<form className={`submission-form${window.innerHeight > window.innerWidth ? ' mobile' : ''}`} onSubmit={e => { e.preventDefault(); submit() }}>
 			<div className="submission-form-title header">Suggest proxies</div>
 			<div className="scheme-form">
-				<input type="checkbox" id="http-checkbox" checked={formData.schemes.has('http')} onChange={() => toggleScheme('http')}/>
-				<label htmlFor="http-checkbox">HTTP</label>
-				<br/>
-				<input type="checkbox" id="https-checkbox" checked={formData.schemes.has('https')} onChange={() => toggleScheme('https')}/>
-				<label htmlFor="https-checkbox">HTTPS</label>
-				<br/>
-				<input type="checkbox" id="socks4-checkbox" checked={formData.schemes.has('socks4')} onChange={() => toggleScheme('socks4')}/>
-				<label htmlFor="socks4-checkbox">SOCKS4</label>
-				<br/>
-				<input type="checkbox" id="socks5-checkbox" checked={formData.schemes.has('socks5')} onChange={() => toggleScheme('socks5')}/>
-				<label htmlFor="socks5-checkbox">SOCKS5</label>
+				{ schemes.map((scheme) => (
+					<PortCheckbox scheme={scheme} checkedSchemes={formData.schemes} onChange={toggleScheme} key={scheme} />
+				))}
 			</div>
 			<div>
-				<input type="checkbox" id="ip-range-checkbox" checked={inputIPRange} onChange={() => toggleRangeInput('address')}/>
+				<input type="checkbox" id="ip-range-checkbox" checked={inputIPRange} onChange={() => toggleRangeInput('address')} />
 				<label htmlFor="ip-range-checkbox">IP range</label>
-				<br/>
-				<input type="text" value={formData.addresses[0]} onChange={e => setAddress(0, e.target.value)}/>
+				<br />
+				<input type="text" value={formData.addresses[0]} onChange={e => setAddress(0, e.target.value)} />
 				<span> — </span>
-				<input type="text" disabled={!inputIPRange} value={formData.addresses[1]} onChange={e => setAddress(1, e.target.value)}/>
+				<input type="text" disabled={!inputIPRange} value={formData.addresses[1]} onChange={e => setAddress(1, e.target.value)} />
 			</div>
 			<div>
-				<input type="checkbox" id="port-range-checkbox" checked={inputPortRange} onChange={() => toggleRangeInput('port')}/>
+				<input type="checkbox" id="port-range-checkbox" checked={inputPortRange} onChange={() => toggleRangeInput('port')} />
 				<label htmlFor="port-range-checkbox">Port range</label>
-				<br/>
-				<input type="number" value={formData.ports[0]} onChange={e => setPort(0, e.target.value)}/>
+				<br />
+				<input type="number" value={formData.ports[0]} onChange={e => setPort(0, e.target.value)} />
 				<span> — </span>
-				<input type="number" disabled={!inputPortRange} value={formData.ports[1]} onChange={e => setPort(1, e.target.value)}/>
+				<input type="number" disabled={!inputPortRange} value={formData.ports[1]} onChange={e => setPort(1, e.target.value)} />
 			</div>
 			<button className="form-submit-button">Submit</button>
 		</form>
